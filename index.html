@@ -1264,9 +1264,12 @@ async function sendMsg(){
         system:SYSTEM_PROMPT,
         messages:[{role:'user',content:txt}]
       })
-    });
-    const data=await res.json();
-    const reply=data.content?.map(b=>b.type==='text'?b.text:'').join('')||'Connection error. Try again.';
+    // });
+    // const data=await res.json();
+    // const reply=data.content?.map(b=>b.type==='text'?b.text:'').join('')||'Connection error. Try again.';
+
+    const data = await res.json();
+const reply = data.choices?.[0]?.message?.content || 'Connection error. Try again.';
     typing.classList.remove('typing');
     typing.innerHTML=reply;
   }catch(e){
