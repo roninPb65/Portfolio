@@ -1255,7 +1255,7 @@ async function sendMsg(){
   const typing=appendMsg('<div class="dots"><span></span><span></span><span></span></div>','ai',true);
   try{
     // const res=await fetch('https://api.anthropic.com/v1/messages',{
-        const res=await fetch('https://getupandgo.onrender.com/api/chat',{
+    const res=await fetch('https://getupandgo.onrender.com/api/chat',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
@@ -1264,12 +1264,12 @@ async function sendMsg(){
         system:SYSTEM_PROMPT,
         messages:[{role:'user',content:txt}]
       })
-    // });
+    });
     // const data=await res.json();
     // const reply=data.content?.map(b=>b.type==='text'?b.text:'').join('')||'Connection error. Try again.';
 
-    const data = await res.json();
-const reply = data.choices?.[0]?.message?.content || 'Connection error. Try again.';
+  const data = await res.json();
+  const reply = data.choices?.[0]?.message?.content || 'Connection error. Try again.';
     typing.classList.remove('typing');
     typing.innerHTML=reply;
   }catch(e){
