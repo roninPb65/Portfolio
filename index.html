@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
 <title>AXIOM // AI Engineer & Security Architect</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -43,6 +44,26 @@
   .nav-status { font-family: 'Share Tech Mono', monospace; font-size: 0.65rem; color: var(--green); display: flex; align-items: center; gap: 8px; }
   .status-dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
 
+  /* Default/Light Mode Styles */
+:root {
+  --bg-color: #ffffff;
+  --text-color: #000000;
+}
+
+/* Dark Mode Styles */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-color: #222222;
+    --text-color: #ffffff;
+  }
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+  
   #hero { position: relative; min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; align-items: center; padding: 120px 60px 60px; z-index: 1; overflow: hidden; }
   .hero-left { position: relative; }
   .hero-tag { font-family: 'Share Tech Mono', monospace; font-size: 0.7rem; color: var(--green); letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; opacity: 0; animation: fadeUp 0.8s 0.3s forwards; }
