@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sukhpreet Singh — Programmer Analyst / Full-Stack Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-void: #090C12;
+    --bg-panel: #10151F;
+    --bg-panel-raised: #171E2C;
+    --line: #232C3D;
+    --line-soft: #1A2130;
+    --text-primary: #E9EEF6;
+    --text-muted: #8A96AC;
+    --text-dim: #5A6478;
+
+    --frontend: #5EEAD4;   /* teal — UI layer */
+    --backend:  #60A5FA;   /* blue — logic layer */
+    --data:     #F2A93B;   /* amber — data layer */
+    --infra:    #A78BFA;   /* violet — infra layer */
+
+    --frontend-dim: rgba(94,234,212,0.12);
+    --backend-dim: rgba(96,165,250,0.12);
+    --data-dim: rgba(242,169,59,0.12);
+    --infra-dim: rgba(167,139,250,0.12);
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background:var(--bg-void);
+    color:var(--text-primary);
+    font-family:'Inter', sans-serif;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  ::selection{ background:var(--backend); color:#090C12; }
+
+  h1,h2,h3{ font-family:'Space Grotesk', sans-serif; font-weight:600; letter-spacing:-0.01em; }
+
+  .mono{ font-family:'JetBrains Mono', monospace; }
+
+  a{ color:inherit; text-decoration:none; }
+
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--text-dim);
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before{
+    content:'';
+    width:16px; height:1px;
+    background:var(--text-dim);
+    display:inline-block;
+  }
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:22px 5vw;
+    backdrop-filter:blur(10px);
+    background:linear-gradient(to bottom, rgba(9,12,18,0.85), rgba(9,12,18,0));
+    transition:padding 0.3s ease;
+  }
+  .nav-mark{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.85rem;
+    color:var(--text-primary);
+    display:flex; align-items:center; gap:8px;
+  }
+  .nav-mark .dot{ width:7px; height:7px; border-radius:50%; background:var(--frontend); box-shadow:0 0 8px var(--frontend); animation:pulse 2.4s ease-in-out infinite; }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:0.35;} }
+
+  .nav-links{ display:flex; gap:34px; }
+  .nav-links a{
+    font-size:0.82rem; color:var(--text-muted);
+    font-family:'JetBrains Mono', monospace;
+    letter-spacing:0.03em;
+    transition:color 0.25s ease;
+    position:relative;
+  }
+  .nav-links a:hover{ color:var(--text-primary); }
+  .nav-links{ display:none; }
+  @media(min-width:840px){ .nav-links{ display:flex; } }
+
+  .nav-cta{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.78rem;
+    padding:8px 16px;
+    border:1px solid var(--line);
+    border-radius:3px;
+    color:var(--text-primary);
+    transition:border-color 0.25s ease, background 0.25s ease;
+  }
+  .nav-cta:hover{ border-color:var(--backend); background:var(--backend-dim); }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    padding:0 5vw;
+    overflow:hidden;
+  }
+  #hero-canvas{
+    position:absolute;
+    top:0; right:0;
+    width:100%; height:100%;
+    z-index:1;
+    opacity:0;
+    transition:opacity 1.6s ease;
+  }
+  #hero-canvas.loaded{ opacity:1; }
+  #hero-canvas.dragging{ cursor:grabbing; }
+  #hero-canvas{ cursor:grab; touch-action:none; }
+
+  .hero-hologram-label{
+    position:absolute; z-index:3;
+    top:0; left:0;
+    transform:translate(-50%,-50%);
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.78rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--frontend);
+    text-shadow:0 0 12px rgba(94,234,212,0.8);
+    padding:8px 16px;
+    border:1px solid rgba(94,234,212,0.5);
+    border-radius:3px;
+    background:rgba(9,12,18,0.55);
+    backdrop-filter:blur(4px);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity 0.25s ease;
+    white-space:nowrap;
+  }
+  .hero-hologram-label.visible{ opacity:1; }
+
+  .hero-content{
+    position:relative; z-index:2;
+    max-width:640px;
+    padding-top:90px;
+    pointer-events:none;
+  }
+  .hero-content a, .hero-content button{ pointer-events:auto; }
+
+  .hero.dragging, .hero.dragging *{ user-select:none; }
+
+  .hero-content .eyebrow{ margin-bottom:22px; }
+
+  .hero-title{
+    font-size:clamp(2.6rem, 5.4vw, 4.4rem);
+    line-height:1.04;
+    color:var(--text-primary);
+  }
+  .hero-title .accent{
+    background:linear-gradient(90deg, var(--frontend), var(--backend));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+
+  .hero-sub{
+    margin-top:26px;
+    font-size:1.05rem;
+    line-height:1.65;
+    color:var(--text-muted);
+    max-width:480px;
+  }
+
+  .hero-actions{ display:flex; gap:14px; margin-top:40px; flex-wrap:wrap; }
+  .btn{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.82rem;
+    padding:13px 22px;
+    border-radius:3px;
+    display:inline-flex; align-items:center; gap:10px;
+    transition:all 0.25s ease;
+  }
+  .btn-primary{
+    background:var(--text-primary);
+    color:var(--bg-void);
+  }
+  .btn-primary:hover{ background:var(--frontend); transform:translateY(-2px); }
+  .btn-ghost{
+    border:1px solid var(--line);
+    color:var(--text-primary);
+  }
+  .btn-ghost:hover{ border-color:var(--text-muted); transform:translateY(-2px); }
+
+  .hero-meta{
+    position:absolute; bottom:44px; left:5vw; right:5vw; z-index:2;
+    display:flex; justify-content:space-between; align-items:flex-end;
+    flex-wrap:wrap; gap:16px;
+    pointer-events:none;
+  }
+  .scroll-cue{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.7rem;
+    color:var(--text-dim);
+    display:flex; align-items:center; gap:10px;
+  }
+  .scroll-cue .line{ width:1px; height:34px; background:linear-gradient(to bottom, var(--text-dim), transparent); animation:scrolldown 1.8s ease-in-out infinite; }
+  @keyframes scrolldown{ 0%{ transform:scaleY(0); transform-origin:top;} 50%{ transform:scaleY(1); transform-origin:top;} 51%{transform-origin:bottom;} 100%{ transform:scaleY(0); transform-origin:bottom;} }
+
+  .hero-location{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.75rem;
+    color:var(--text-dim);
+    text-align:right;
+  }
+
+  /* ---------- SECTION SHARED ---------- */
+  section{ position:relative; padding:120px 5vw; }
+  .section-head{ margin-bottom:64px; max-width:640px; }
+  .section-head h2{ font-size:clamp(1.8rem, 3vw, 2.6rem); margin-top:16px; }
+  .section-head p{ margin-top:16px; color:var(--text-muted); line-height:1.65; font-size:1rem; max-width:560px; }
+
+  /* ---------- WHY ME ---------- */
+  .why-intro{ max-width:700px; margin-bottom:56px; }
+  .why-intro p{ color:var(--text-muted); font-size:1.02rem; line-height:1.75; }
+  .why-intro strong{ color:var(--text-primary); font-weight:500; }
+
+  .why-grid{ display:grid; grid-template-columns:1fr; gap:1px; max-width:1180px; background:var(--line-soft); border:1px solid var(--line-soft); }
+  @media(min-width:760px){ .why-grid{ grid-template-columns:1fr 1fr; } }
+  .why-card{
+    background:var(--bg-panel);
+    padding:36px 32px;
+    transition:background 0.3s ease;
+  }
+  .why-card:hover{ background:var(--bg-panel-raised); }
+  .why-num{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    margin-bottom:16px;
+    display:inline-block;
+    padding:4px 10px;
+    border-radius:20px;
+  }
+  .why-card[data-tier="frontend"] .why-num{ color:var(--frontend); background:var(--frontend-dim); }
+  .why-card[data-tier="backend"] .why-num{ color:var(--backend); background:var(--backend-dim); }
+  .why-card[data-tier="data"] .why-num{ color:var(--data); background:var(--data-dim); }
+  .why-card[data-tier="infra"] .why-num{ color:var(--infra); background:var(--infra-dim); }
+  .why-card h3{ font-size:1.2rem; margin-bottom:12px; line-height:1.3; }
+  .why-card p{ color:var(--text-muted); font-size:0.94rem; line-height:1.7; }
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{
+    display:grid; grid-template-columns:1fr; gap:60px;
+    max-width:1180px;
+  }
+  @media(min-width:900px){ .about-grid{ grid-template-columns:1.1fr 0.9fr; } }
+  .about-text p{ color:var(--text-muted); line-height:1.85; font-size:1.02rem; margin-bottom:20px; }
+  .about-text strong{ color:var(--text-primary); font-weight:500; }
+
+  .about-facts{ display:flex; flex-direction:column; gap:0; border-top:1px solid var(--line-soft); }
+  .fact{
+    display:flex; justify-content:space-between; align-items:baseline;
+    padding:18px 0; border-bottom:1px solid var(--line-soft);
+    font-family:'JetBrains Mono', monospace; font-size:0.85rem;
+  }
+  .fact span:first-child{ color:var(--text-dim); }
+  .fact span:last-child{ color:var(--text-primary); text-align:right; }
+
+  /* ---------- STACK (layers) ---------- */
+  .layers{ display:flex; flex-direction:column; gap:2px; max-width:1180px; }
+  .layer{
+    display:grid;
+    grid-template-columns: 140px 1fr;
+    gap: 28px;
+    align-items:center;
+    padding:26px 26px;
+    background:var(--bg-panel);
+    border:1px solid var(--line-soft);
+    border-left:3px solid transparent;
+    transition:background 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+    cursor:default;
+  }
+  .layer + .layer{ margin-top:-1px; }
+  .layer:hover{ transform:translateX(6px); background:var(--bg-panel-raised); }
+  .layer[data-tier="frontend"]{ border-left-color:var(--frontend); }
+  .layer[data-tier="backend"]{ border-left-color:var(--backend); }
+  .layer[data-tier="data"]{ border-left-color:var(--data); }
+  .layer[data-tier="infra"]{ border-left-color:var(--infra); }
+
+  .layer-label{ display:flex; flex-direction:column; gap:6px; }
+  .layer-label .tier-name{ font-family:'Space Grotesk', sans-serif; font-size:1.05rem; font-weight:600; }
+  .layer-label .tier-tag{ font-family:'JetBrains Mono', monospace; font-size:0.68rem; letter-spacing:0.08em; text-transform:uppercase; }
+  .layer[data-tier="frontend"] .tier-tag{ color:var(--frontend); }
+  .layer[data-tier="backend"] .tier-tag{ color:var(--backend); }
+  .layer[data-tier="data"] .tier-tag{ color:var(--data); }
+  .layer[data-tier="infra"] .tier-tag{ color:var(--infra); }
+
+  .chips{ display:flex; flex-wrap:wrap; gap:10px; }
+  .chip{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.78rem;
+    padding:7px 13px;
+    border-radius:20px;
+    border:1px solid var(--line);
+    color:var(--text-muted);
+    background:var(--bg-void);
+  }
+
+  /* ---------- EXPERIENCE / PRODUCTION LOG ---------- */
+  .log{ max-width:900px; }
+  .log-entry{
+    display:grid;
+    grid-template-columns: 190px 1fr;
+    gap:28px;
+    padding:34px 0;
+    border-top:1px solid var(--line-soft);
+  }
+  .log-entry:last-child{ border-bottom:1px solid var(--line-soft); }
+  .log-time{ font-family:'JetBrains Mono', monospace; font-size:0.78rem; color:var(--text-dim); line-height:1.6; }
+  .log-time .status{
+    display:inline-flex; align-items:center; gap:7px;
+    margin-bottom:10px; color:var(--frontend); font-size:0.7rem; letter-spacing:0.08em; text-transform:uppercase;
+  }
+  .log-time .status.closed{ color:var(--text-dim); }
+  .log-time .status::before{ content:''; width:6px; height:6px; border-radius:50%; background:currentColor; }
+
+  .log-role{ font-size:1.15rem; font-weight:600; margin-bottom:4px; }
+  .log-org{ color:var(--text-muted); font-size:0.9rem; margin-bottom:16px; }
+  .log-org span{ color:var(--text-dim); }
+  .log-body{ list-style:none; display:flex; flex-direction:column; gap:10px; }
+  .log-body li{ color:var(--text-muted); font-size:0.94rem; line-height:1.6; padding-left:20px; position:relative; }
+  .log-body li::before{ content:'›'; position:absolute; left:0; color:var(--backend); font-family:'JetBrains Mono', monospace; }
+
+  /* ---------- PROJECTS ---------- */
+  .projects{ display:grid; grid-template-columns:1fr; gap:24px; max-width:1180px; }
+  @media(min-width:760px){ .projects{ grid-template-columns:repeat(3, 1fr); } }
+  .project-card{
+    background:var(--bg-panel);
+    border:1px solid var(--line-soft);
+    border-radius:6px;
+    padding:30px 26px;
+    display:flex; flex-direction:column;
+    transition:transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+    transform-style:preserve-3d;
+    perspective:800px;
+  }
+  .project-card:hover{
+    border-color:var(--line);
+    box-shadow:0 20px 40px -20px rgba(0,0,0,0.6);
+  }
+  .project-pipeline{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.68rem;
+    color:var(--text-dim);
+    letter-spacing:0.04em;
+    margin-bottom:18px;
+  }
+  .project-card h3{ font-size:1.18rem; margin-bottom:12px; }
+  .project-card p{ color:var(--text-muted); font-size:0.92rem; line-height:1.65; flex-grow:1; margin-bottom:20px; }
+  .project-stack{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
+  .project-stack span{ font-family:'JetBrains Mono', monospace; font-size:0.7rem; color:var(--text-dim); border:1px solid var(--line-soft); padding:4px 9px; border-radius:20px; }
+  .project-link{ font-family:'JetBrains Mono', monospace; font-size:0.8rem; color:var(--frontend); display:inline-flex; align-items:center; gap:6px; }
+  .project-link.disabled{ color:var(--text-dim); }
+
+  /* ---------- CREDENTIALS ---------- */
+  .cred-grid{ display:grid; grid-template-columns:1fr; gap:60px; max-width:1180px; }
+  @media(min-width:900px){ .cred-grid{ grid-template-columns:1fr 1fr; } }
+  .cred-col h3{ font-size:1rem; color:var(--text-dim); font-family:'JetBrains Mono', monospace; text-transform:uppercase; letter-spacing:0.08em; font-weight:400; margin-bottom:24px; }
+  .cred-item{ padding:18px 0; border-top:1px solid var(--line-soft); display:flex; justify-content:space-between; gap:20px; }
+  .cred-item:last-child{ border-bottom:1px solid var(--line-soft); }
+  .cred-item .cred-name{ font-size:0.98rem; color:var(--text-primary); }
+  .cred-item .cred-org{ font-size:0.85rem; color:var(--text-muted); margin-top:4px; }
+  .cred-item .cred-date{ font-family:'JetBrains Mono', monospace; font-size:0.76rem; color:var(--text-dim); white-space:nowrap; }
+
+  /* ---------- CONTACT ---------- */
+  .contact{ text-align:center; padding-bottom:80px; }
+  .contact .section-head{ margin:0 auto 50px; text-align:center; }
+  .contact-title{
+    font-size:clamp(2.2rem, 5vw, 3.6rem);
+    max-width:720px; margin:0 auto 40px;
+  }
+  .contact-links{ display:flex; justify-content:center; gap:16px; flex-wrap:wrap; }
+
+  footer{
+    padding:34px 5vw;
+    border-top:1px solid var(--line-soft);
+    display:flex; justify-content:space-between; align-items:center;
+    flex-wrap:wrap; gap:14px;
+    font-family:'JetBrains Mono', monospace; font-size:0.74rem; color:var(--text-dim);
+  }
+
+  .reveal{ opacity:0; transform:translateY(24px); transition:opacity 0.8s ease, transform 0.8s ease; }
+  .reveal.visible{ opacity:1; transform:translateY(0); }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; transition:none !important; }
+    .reveal{ opacity:1; transform:none; }
+  }
+
+  @media(max-width:640px){
+    .layer{ grid-template-columns:1fr; gap:14px; }
+    .log-entry{ grid-template-columns:1fr; gap:12px; }
+  }
+
+  a:focus-visible, button:focus-visible{ outline:2px solid var(--backend); outline-offset:3px; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-mark"><span class="dot"></span>SUKHPREET&nbsp;SINGH</div>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#why-me">Why Me</a>
+    <a href="#stack">Stack</a>
+    <a href="#experience">Experience</a>
+    <a href="#projects">Projects</a>
+    <a href="#credentials">Credentials</a>
+  </div>
+  <a class="nav-cta" href="#contact">Contact</a>
+</nav>
+
+<section class="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-hologram-label" id="viewProjectsLabel">View Projects →</div>
+  <div class="hero-content">
+    <div class="eyebrow">Programmer Analyst · Full-Stack Developer</div>
+    <h1 class="hero-title">Systems that stay <span class="accent">up</span>, code that stays <span class="accent">clean</span>.</h1>
+    <p class="hero-sub">I build across the full stack — front end to database to infrastructure — and I stick around after launch to keep production running. Based in Regina, SK.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="#experience">See the work</a>
+      <a class="btn btn-ghost" href="mailto:sukhpreetpb65@gmail.com">Get in touch</a>
+    </div>
+  </div>
+  <div class="hero-meta">
+    <div class="scroll-cue"><div class="line"></div>SCROLL · DRAG TO ROTATE</div>
+    <div class="hero-location">Regina, Saskatchewan, Canada<br>Available on-site · in-province travel ready</div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="section-head reveal">
+    <div class="eyebrow">About</div>
+    <h2>Full software development lifecycle, end to end.</h2>
+  </div>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p>I'm a full-stack developer with hands-on experience across the entire <strong>Software Development Life Cycle</strong> — system analysis and design, program design, coding, testing, documentation, implementation, configuration, and ongoing production support.</p>
+      <p>Most recently I worked inside a live Electronic Medical Record platform, tracking production performance and correcting operational problems as they surfaced — not just shipping features, but owning what happens after. Before that, I supported a logistics operations platform used daily by brokers, managers, and finance teams, correcting issues in real time and liaising directly with the people who depended on the system.</p>
+      <p>I hold a postgraduate diploma in <strong>Artificial Intelligence</strong> from SAIT and a diploma in <strong>Cyber Security</strong> from Saskatchewan Polytechnic, and I've trained and mentored junior developers and interns on coding standards and Git workflows.</p>
+    </div>
+    <div class="about-facts reveal">
+      <div class="fact"><span>Based in</span><span>Regina, SK</span></div>
+      <div class="fact"><span>Focus</span><span>Full-stack development &amp; production support</span></div>
+      <div class="fact"><span>Languages</span><span>PHP · JavaScript/TypeScript · Java · SQL · Python</span></div>
+      <div class="fact"><span>Education</span><span>PG Dip. AI (SAIT) · Dip. Cyber Security (Sask Polytechnic)</span></div>
+      <div class="fact"><span>Availability</span><span>On-site · in/out-of-province travel</span></div>
+      <div class="fact"><span>Email</span><span>sukhpreetpb65@gmail.com</span></div>
+      <div class="fact"><span>Phone</span><span>306-351-5549</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="why-me">
+  <div class="section-head reveal">
+    <div class="eyebrow">Why Me</div>
+    <h2>Plenty of developers know this stack. Here's what I do with it.</h2>
+  </div>
+  <div class="why-intro reveal">
+    <p>Angular, Laravel, PostgreSQL, Docker — a lot of people can list these. <strong>The difference shows up after the demo works</strong>, when the system is live, someone's depending on it, and something breaks at 4pm on a Tuesday.</p>
+  </div>
+  <div class="why-grid">
+    <div class="why-card reveal" data-tier="frontend">
+      <span class="why-num">01</span>
+      <h3>I stay for production, not just the demo.</h3>
+      <p>On the Guardian EMR platform I didn't just ship features — I actively tracked production performance and corrected operational problems as they surfaced, on a system holding real patient data. Most developers hand off at deployment. I treat launch as the start of the job, not the end of it.</p>
+    </div>
+    <div class="why-card reveal" data-tier="infra">
+      <span class="why-num">02</span>
+      <h3>I think in security and AI, not just syntax.</h3>
+      <p>A postgraduate diploma in AI paired with a diploma in Cyber Security means I'm not bolting security on after the fact or treating AI features as a black box — I'm reasoning about attack surface, data handling, and model behavior while the architecture is still being decided.</p>
+    </div>
+    <div class="why-card reveal" data-tier="data">
+      <span class="why-num">03</span>
+      <h3>I've sat across from the people who use what I build.</h3>
+      <p>Supporting valueloads.com meant direct, ongoing liaison with brokers, managers, and Accounts Payable/Receivable staff — not a ticket queue, a relationship. I've had to explain a bug to someone who isn't technical and still needs their day to work. That changes how you build things.</p>
+    </div>
+    <div class="why-card reveal" data-tier="backend">
+      <span class="why-num">04</span>
+      <h3>I leave teams better than I found them.</h3>
+      <p>I've trained and mentored three interns and a junior developer on coding standards and Git workflow — not because I was asked to have that title, but because a codebase only stays healthy if the people writing it are improving too.</p>
+    </div>
+  </div>
+</section>
+
+<section id="stack">
+  <div class="section-head reveal">
+    <div class="eyebrow">The Stack</div>
+    <h2>Four layers, one developer.</h2>
+    <p>Same layering shown in the diagram above — the tools I reach for at each tier of a running system.</p>
+  </div>
+  <div class="layers">
+    <div class="layer reveal" data-tier="frontend">
+      <div class="layer-label"><span class="tier-name">Frontend</span><span class="tier-tag">Interface layer</span></div>
+      <div class="chips">
+        <span class="chip">Angular</span><span class="chip">React</span><span class="chip">TypeScript</span><span class="chip">JavaScript</span><span class="chip">HTML/CSS</span>
+      </div>
+    </div>
+    <div class="layer reveal" data-tier="backend">
+      <div class="layer-label"><span class="tier-name">Backend</span><span class="tier-tag">Logic layer</span></div>
+      <div class="chips">
+        <span class="chip">Laravel</span><span class="chip">Yii2</span><span class="chip">Node.js</span><span class="chip">Express</span><span class="chip">Flask</span><span class="chip">PHP</span><span class="chip">Java</span><span class="chip">Python</span>
+      </div>
+    </div>
+    <div class="layer reveal" data-tier="data">
+      <div class="layer-label"><span class="tier-name">Data</span><span class="tier-tag">Storage layer</span></div>
+      <div class="chips">
+        <span class="chip">PostgreSQL</span><span class="chip">MySQL</span><span class="chip">SQL reporting</span><span class="chip">Corporate data models</span>
+      </div>
+    </div>
+    <div class="layer reveal" data-tier="infra">
+      <div class="layer-label"><span class="tier-name">Infra &amp; Ops</span><span class="tier-tag">Production layer</span></div>
+      <div class="chips">
+        <span class="chip">AWS S3</span><span class="chip">Docker</span><span class="chip">Kubernetes</span><span class="chip">GitHub CI/CD</span><span class="chip">Backup &amp; recovery</span><span class="chip">Active Directory</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="section-head reveal">
+    <div class="eyebrow">Experience</div>
+    <h2>Production log.</h2>
+    <p>Every role, in the order it happened — what shipped, and what kept running afterward.</p>
+  </div>
+  <div class="log">
+
+    <div class="log-entry reveal">
+      <div class="log-time">
+        <div class="status">Most recent</div>
+        May 2025 — Jan 2026
+      </div>
+      <div>
+        <div class="log-role">Back End Developer — Guardian EMR</div>
+        <div class="log-org">Weyburn, Saskatchewan <span>· Electronic Medical Record platform</span></div>
+        <ul class="log-body">
+          <li>Analyzed and designed EMR system components, translating clinical workflow requirements into specs, then carried them through coding, testing, and implementation across Angular front end and Laravel back end, hosted on DigitalOcean.</li>
+          <li>Tracked and monitored production performance, diagnosing and correcting operational problems alongside front-end and QA teams to minimize disruption to daily clinical operations.</li>
+          <li>Monitored network traffic through Cloudflare and maintained backup and recovery procedures protecting a system handling sensitive patient data.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="log-entry reveal">
+      <div class="log-time">
+        <div class="status closed">Closed</div>
+        Feb 2023 — Dec 2024
+      </div>
+      <div>
+        <div class="log-role">PHP Developer — Live Development Support</div>
+        <div class="log-org">Creed InfoTech, Punjab, India <span>· valueloads.com logistics platform</span></div>
+        <ul class="log-body">
+          <li>Provided live coding, configuration, and production support for a logistics operations platform used by brokers, managers, team leads, and Accounts Payable/Receivable staff, plus an executive dashboard.</li>
+          <li>Diagnosed and corrected production issues in real time, maintaining close liaison with client departments to keep pace with a changing business environment.</li>
+          <li>Prepared development plans and implemented ongoing enhancements, including backend configuration, deployments, and AWS S3 storage management.</li>
+          <li>Helped client departments pull information from corporate databases for day-to-day reporting.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="log-entry reveal">
+      <div class="log-time">
+        <div class="status closed">Closed</div>
+        Apr 2022 — Feb 2023
+      </div>
+      <div>
+        <div class="log-role">Web Developer — NexEver Pvt Ltd</div>
+        <div class="log-org">Sahibzada Ajit Singh Nagar, Punjab, India <span>· Software solutions agency</span></div>
+        <ul class="log-body">
+          <li>Handled program design, coding, and testing for client web applications using HTML, CSS, PHP, SQL, Laravel, Node.js, and Angular across multiple concurrent projects.</li>
+          <li>Set up Git version control and GitHub-based CI/CD pipelines to automate testing and deployment.</li>
+          <li>Trained and mentored 3 interns and 1 junior developer on coding standards, Git workflows, and development practices.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="log-entry reveal">
+      <div class="log-time">
+        <div class="status closed">Closed</div>
+        Dec 2021 — Apr 2022
+      </div>
+      <div>
+        <div class="log-role">Web Developer (Intern) — NexEver Pvt Ltd</div>
+        <div class="log-org">Sas Nagar, Punjab, India</div>
+        <ul class="log-body">
+          <li>Contributed to front-end and back-end coding on early-stage client projects, building foundational development skills in a self-directed, team-based environment.</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="projects">
+  <div class="section-head reveal">
+    <div class="eyebrow">Projects</div>
+    <h2>Tools built to solve real problems.</h2>
+    <p>Self-directed work — the kind I build when nobody asks me to.</p>
+  </div>
+  <div class="projects">
+
+    <div class="project-card reveal">
+      <div class="project-pipeline">EXTRACT → STRUCTURE → RENDER → STORE</div>
+      <h3>TTG Document Standardizer</h3>
+      <p>An internal tool that replaces a manual document-formatting workflow with a simple upload-and-download app. Designed the full pipeline and backup-supported job history on a PostgreSQL store, deployed to Kubernetes.</p>
+      <div class="project-stack"><span>React</span><span>TypeScript</span><span>Express</span><span>PostgreSQL</span><span>Docker</span><span>Kubernetes</span></div>
+      <span class="project-link disabled">Internal tool</span>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-pipeline">UPLOAD → CLEAN → ANALYZE → EXPORT</div>
+      <h3>Universal Data Analyzer</h3>
+      <p>A self-serve data analysis tool: dataset upload, cleaning, missing-value handling, outlier detection, correlation, t-tests, and ANOVA, with a reporting and export layer for end users.</p>
+      <div class="project-stack"><span>Flask</span><span>Pandas</span><span>React</span></div>
+      <a class="project-link" href="https://analyseweb.onrender.com/" target="_blank" rel="noopener">View live ↗</a>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-pipeline">QUERY → STREAM → PERSONALIZE</div>
+      <h3>Alberta Career Pathways</h3>
+      <p>A decision-support app that pulls from live external data sources and streams personalized results back to the user in real time as they answer questions.</p>
+      <div class="project-stack"><span>Flask</span><span>Server-Sent Events</span><span>Live API integration</span></div>
+      <a class="project-link" href="https://course-summary.onrender.com/" target="_blank" rel="noopener">View live ↗</a>
+    </div>
+
+  </div>
+</section>
+
+<section id="credentials">
+  <div class="section-head reveal">
+    <div class="eyebrow">Credentials</div>
+    <h2>Certifications &amp; education.</h2>
+  </div>
+  <div class="cred-grid">
+    <div class="cred-col reveal">
+      <h3>Certifications</h3>
+      <div class="cred-item">
+        <div><div class="cred-name">AWS Academy Cloud Security Foundations</div><div class="cred-org">AWS Academy Graduate</div></div>
+      </div>
+      <div class="cred-item">
+        <div><div class="cred-name">AWS Academy Cloud Security Builder</div><div class="cred-org">AWS Academy Graduate</div></div>
+      </div>
+      <div class="cred-item">
+        <div><div class="cred-name">Pentest &amp; Red Teaming — Metasploitable</div><div class="cred-org">CompTIA / TryHackMe</div></div>
+      </div>
+    </div>
+    <div class="cred-col reveal">
+      <h3>Education</h3>
+      <div class="cred-item">
+        <div><div class="cred-name">Postgraduate Diploma, Artificial Intelligence</div><div class="cred-org">Southern Alberta Institute of Technology (SAIT)</div></div>
+        <div class="cred-date">Jan 2026</div>
+      </div>
+      <div class="cred-item">
+        <div><div class="cred-name">Diploma, Cyber Security</div><div class="cred-org">Saskatchewan Polytechnic</div></div>
+        <div class="cred-date">Jan – Dec 2025</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="contact">
+  <div class="section-head reveal">
+    <div class="eyebrow" style="justify-content:center;">Contact</div>
+  </div>
+  <h2 class="contact-title reveal">Have a system that needs building — or one that needs keeping alive?</h2>
+  <div class="contact-links reveal">
+    <a class="btn btn-primary" href="mailto:sukhpreetpb65@gmail.com">sukhpreetpb65@gmail.com</a>
+    <a class="btn btn-ghost" href="tel:3063515549">306-351-5549</a>
+    <a class="btn btn-ghost" href="https://linkedin.com/in/sukhpreetsingh-0b5783203" target="_blank" rel="noopener">LinkedIn ↗</a>
+    <a class="btn btn-ghost" href="https://github.com/roninPb65" target="_blank" rel="noopener">GitHub ↗</a>
+  </div>
+</section>
+
+<footer>
+  <div>© 2026 Sukhpreet Singh · Regina, SK</div>
+  <div>Built with Three.js</div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+  // ---------- Reveal on scroll ----------
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold:0.15 });
+  revealEls.forEach(el=>io.observe(el));
+
+  // ---------- Three.js hero: isometric desk workspace ----------
+  (function(){
+    const canvas = document.getElementById('hero-canvas');
+    const label = document.getElementById('viewProjectsLabel');
+    const hero = document.querySelector('.hero');
+    let width = hero.clientWidth, height = hero.clientHeight;
+
+    const CYAN = 0x5EEAD4, PURPLE = 0xA78BFA, WOOD = 0x8a6a4c, CONCRETE = 0x3a4152,
+          DARKBODY = 0x1b2130, KEYBASE = 0x232c3d, TERRACOTTA = 0xb0603f, LEAF = 0x4fae7a;
+
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.Fog(0x090C12, 14, 30);
+
+    // Orthographic camera for a true isometric look
+    const frustum = 6.5;
+    const camera = new THREE.OrthographicCamera(-frustum, frustum, frustum, -frustum, 0.1, 100);
+    const camDefaultPos = new THREE.Vector3(11.6, 7.6, 10.0);
+    const camClosePos   = new THREE.Vector3(6.2, 2.9, 5.0);
+    const targetDefault = new THREE.Vector3(3.4, 0.3, 0.15);
+    const targetClose   = new THREE.Vector3(4.0, 0.95, -0.3);
+    camera.position.copy(camDefaultPos);
+    camera.lookAt(targetDefault);
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(width, height);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+    // ---- Lighting ----
+    scene.add(new THREE.AmbientLight(0x3a4358, 0.7));
+    const sun = new THREE.DirectionalLight(0xfff3e0, 0.9);
+    sun.position.set(6, 10, 5);
+    sun.castShadow = true;
+    sun.shadow.mapSize.set(1024, 1024);
+    sun.shadow.camera.left = -6; sun.shadow.camera.right = 6;
+    sun.shadow.camera.top = 6; sun.shadow.camera.bottom = -6;
+    scene.add(sun);
+
+    const glowCyan = new THREE.PointLight(CYAN, 3.2, 7, 2);
+    glowCyan.position.set(0, 1.3, -1.5);
+    scene.add(glowCyan);
+
+    const glowPurple = new THREE.PointLight(PURPLE, 2.0, 5, 2);
+    glowPurple.position.set(0.2, 0.35, 0.6);
+    scene.add(glowPurple);
+
+    // ---- Rig group (rotated by drag) ----
+    const rig = new THREE.Group();
+    scene.add(rig);
+    const deskGroup = new THREE.Group();
+    rig.add(deskGroup);
+
+    // Platform (concrete, low-poly hexagonal, floating)
+    const platform = new THREE.Mesh(
+      new THREE.CylinderGeometry(4.3, 4.5, 0.5, 6),
+      new THREE.MeshStandardMaterial({ color: CONCRETE, roughness:0.9, metalness:0.05 })
+    );
+    platform.position.y = -0.65;
+    platform.receiveShadow = true;
+    deskGroup.add(platform);
+
+    // Desk surface (wood tone), floating slightly above platform
+    const deskTop = new THREE.Mesh(
+      new THREE.BoxGeometry(6, 0.22, 3),
+      new THREE.MeshStandardMaterial({ color: WOOD, roughness:0.6, metalness:0.05 })
+    );
+    deskTop.position.y = 0;
+    deskTop.castShadow = true; deskTop.receiveShadow = true;
+    deskGroup.add(deskTop);
+    const deskSurfaceY = 0.11;
+
+    // ---- Monitor ----
+    const monitorGroup = new THREE.Group();
+    const standMat = new THREE.MeshStandardMaterial({ color: DARKBODY, roughness:0.5, metalness:0.4 });
+    const monitorStand = new THREE.Mesh(new THREE.CylinderGeometry(0.16,0.2,0.45,10), standMat);
+    monitorStand.position.set(0, deskSurfaceY + 0.225, -1.0);
+    monitorStand.castShadow = true;
+    monitorGroup.add(monitorStand);
+
+    const monitorFoot = new THREE.Mesh(new THREE.CylinderGeometry(0.55,0.55,0.04,16), standMat);
+    monitorFoot.position.set(0, deskSurfaceY + 0.02, -1.0);
+    monitorFoot.castShadow = true;
+    monitorGroup.add(monitorFoot);
+
+    const monitorBody = new THREE.Mesh(
+      new THREE.BoxGeometry(3.3, 1.15, 0.08),
+      new THREE.MeshStandardMaterial({ color: 0x11151d, roughness:0.4, metalness:0.5 })
+    );
+    monitorBody.position.set(0, deskSurfaceY + 0.45 + 0.575, -1.06);
+    monitorBody.rotation.x = -0.04;
+    monitorBody.castShadow = true;
+    monitorGroup.add(monitorBody);
+
+    const screenMat = new THREE.MeshBasicMaterial({ color: CYAN, transparent:true, opacity:0.9 });
+    const monitorScreen = new THREE.Mesh(new THREE.PlaneGeometry(3.05, 1.0), screenMat);
+    monitorScreen.position.copy(monitorBody.position);
+    monitorScreen.position.z -= 0.045;
+    monitorScreen.rotation.x = -0.04;
+    monitorGroup.add(monitorScreen);
+    deskGroup.add(monitorGroup);
+
+    // ---- Keyboard with glowing keycaps ----
+    const keyboardGroup = new THREE.Group();
+    const kbBody = new THREE.Mesh(
+      new THREE.BoxGeometry(1.9, 0.09, 0.65),
+      new THREE.MeshStandardMaterial({ color: KEYBASE, roughness:0.55, metalness:0.3 })
+    );
+    kbBody.position.set(0, deskSurfaceY + 0.045, 0.35);
+    kbBody.castShadow = true; kbBody.receiveShadow = true;
+    keyboardGroup.add(kbBody);
+
+    const keyGeo = new THREE.BoxGeometry(0.13, 0.035, 0.13);
+    const keyColors = [CYAN, PURPLE];
+    for (let row = 0; row < 4; row++){
+      for (let col = 0; col < 11; col++){
+        const mat = new THREE.MeshBasicMaterial({ color: keyColors[(row+col)%2===0?0:1], transparent:true, opacity:0.85 });
+        const key = new THREE.Mesh(keyGeo, mat);
+        key.position.set(-0.78 + col*0.155, deskSurfaceY + 0.105, 0.14 + row*0.155);
+        keyboardGroup.add(key);
+      }
+    }
+    deskGroup.add(keyboardGroup);
+
+    // ---- Mouse (cylinder body + sphere caps, since CapsuleGeometry isn't in r128) ----
+    const mouseGroup = new THREE.Group();
+    const mouseMat = new THREE.MeshStandardMaterial({ color: 0x2a3244, roughness:0.4, metalness:0.4 });
+    const mouseBody = new THREE.Mesh(new THREE.CylinderGeometry(0.11,0.11,0.16,12), mouseMat);
+    mouseBody.rotation.z = Math.PI/2;
+    mouseGroup.add(mouseBody);
+    const mouseCapA = new THREE.Mesh(new THREE.SphereGeometry(0.11,12,12), mouseMat);
+    mouseCapA.position.x = 0.08;
+    mouseGroup.add(mouseCapA);
+    const mouseCapB = new THREE.Mesh(new THREE.SphereGeometry(0.11,12,12), mouseMat);
+    mouseCapB.position.x = -0.08;
+    mouseGroup.add(mouseCapB);
+    mouseGroup.scale.set(1, 0.65, 0.8);
+    mouseGroup.position.set(1.35, deskSurfaceY + 0.09, 0.4);
+    mouseGroup.traverse(o=>{ if(o.isMesh) o.castShadow = true; });
+    deskGroup.add(mouseGroup);
+
+    // ---- Desk lamp ----
+    const lampGroup = new THREE.Group();
+    const lampMat = new THREE.MeshStandardMaterial({ color: 0x2a3244, roughness:0.4, metalness:0.6 });
+    const lampBase = new THREE.Mesh(new THREE.CylinderGeometry(0.18,0.2,0.05,12), lampMat);
+    lampBase.position.set(-2.35, deskSurfaceY + 0.025, -0.7);
+    lampGroup.add(lampBase);
+    const lampArm = new THREE.Mesh(new THREE.CylinderGeometry(0.03,0.03,0.9,8), lampMat);
+    lampArm.position.set(-2.35, deskSurfaceY + 0.5, -0.75);
+    lampArm.rotation.z = 0.35;
+    lampGroup.add(lampArm);
+    const lampHead = new THREE.Mesh(new THREE.ConeGeometry(0.18,0.28,10,1,true), lampMat);
+    lampHead.position.set(-2.65, deskSurfaceY + 0.92, -0.6);
+    lampHead.rotation.z = 2.4;
+    lampGroup.add(lampHead);
+    const lampBulb = new THREE.Mesh(new THREE.SphereGeometry(0.07,10,10), new THREE.MeshBasicMaterial({ color:0xffe3ad }));
+    lampBulb.position.set(-2.68, deskSurfaceY + 0.83, -0.6);
+    lampGroup.add(lampBulb);
+    const lampLight = new THREE.PointLight(0xffd9a0, 1.1, 2.5, 2);
+    lampLight.position.copy(lampBulb.position);
+    lampGroup.add(lampLight);
+    lampGroup.traverse(o=>{ if(o.isMesh) o.castShadow = true; });
+    deskGroup.add(lampGroup);
+
+    // ---- Potted succulent ----
+    const succulentGroup = new THREE.Group();
+    const pot = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.17,0.13,0.24,10),
+      new THREE.MeshStandardMaterial({ color: TERRACOTTA, roughness:0.8 })
+    );
+    pot.position.set(-2.3, deskSurfaceY + 0.12, 0.55);
+    pot.castShadow = true;
+    succulentGroup.add(pot);
+    for (let i=0;i<6;i++){
+      const leaf = new THREE.Mesh(
+        new THREE.IcosahedronGeometry(0.11,0),
+        new THREE.MeshStandardMaterial({ color: LEAF, roughness:0.6, flatShading:true })
+      );
+      const a = (i/6)*Math.PI*2;
+      leaf.position.set(-2.3 + Math.cos(a)*0.08, deskSurfaceY + 0.28 + Math.random()*0.05, 0.55 + Math.sin(a)*0.08);
+      leaf.castShadow = true;
+      succulentGroup.add(leaf);
+    }
+    deskGroup.add(succulentGroup);
+
+    // ---- Holographic wireframe grid orbiting the monitor ----
+    const orbitPivot = new THREE.Group();
+    orbitPivot.position.copy(monitorBody.position);
+    deskGroup.add(orbitPivot);
+    const ringDefs = [
+      { r: 1.15, color: CYAN,   axis:'x', speed: 0.006 },
+      { r: 1.45, color: PURPLE, axis:'y', speed: -0.004 },
+      { r: 1.75, color: CYAN,   axis:'z', speed: 0.003 }
+    ];
+    const rings = ringDefs.map(def=>{
+      const ring = new THREE.Mesh(
+        new THREE.TorusGeometry(def.r, 0.006, 6, 48),
+        new THREE.MeshBasicMaterial({ color: def.color, transparent:true, opacity:0.45 })
+      );
+      if(def.axis==='x') ring.rotation.x = Math.PI/2;
+      if(def.axis==='z') ring.rotation.y = Math.PI/2;
+      ring.userData.speed = def.speed;
+      ring.userData.axis = def.axis;
+      orbitPivot.add(ring);
+      return ring;
+    });
+
+    // small floating grid plane for extra "wireframe grid" read
+    const gridHelper = new THREE.GridHelper(2.2, 10, PURPLE, CYAN);
+    gridHelper.material.transparent = true;
+    gridHelper.material.opacity = 0.25;
+    gridHelper.position.copy(orbitPivot.position);
+    gridHelper.position.x += 2.1;
+    gridHelper.position.y -= 0.2;
+    deskGroup.add(gridHelper);
+
+    deskGroup.position.x = 4.0;
+    deskGroup.position.z = 0.6;
+    deskGroup.scale.setScalar(0.74);
+
+    // ---- Raycasting for hover ----
+    const raycaster = new THREE.Raycaster();
+    const mouseVec = new THREE.Vector2();
+    let hovering = false;
+
+    function updateLabelPosition(){
+      const worldPos = new THREE.Vector3();
+      monitorScreen.getWorldPosition(worldPos);
+      worldPos.project(camera);
+      const x = (worldPos.x * 0.5 + 0.5) * width;
+      const y = (-worldPos.y * 0.5 + 0.5) * height;
+      label.style.left = x + 'px';
+      label.style.top = (y - 40) + 'px';
+    }
+
+    function onPointerMoveHover(clientX, clientY){
+      const rect = canvas.getBoundingClientRect();
+      mouseVec.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+      mouseVec.y = -((clientY - rect.top) / rect.height) * 2 + 1;
+      raycaster.setFromCamera(mouseVec, camera);
+      const hit = raycaster.intersectObject(monitorScreen, false).length > 0;
+      hovering = hit;
+      label.classList.toggle('visible', hovering);
+    }
+
+    // ---- Drag to rotate (clamped to ~30deg) ----
+    const MAX_ROT = THREE.MathUtils.degToRad(30);
+    let isDragging = false, lastX = 0, lastY = 0;
+    let targetRotY = 0, targetRotX = 0;
+
+    function pointerDown(e){
+      isDragging = true;
+      canvas.classList.add('dragging');
+      hero.classList.add('dragging');
+      e.preventDefault();
+      lastX = e.clientX ?? e.touches[0].clientX;
+      lastY = e.clientY ?? e.touches[0].clientY;
+    }
+    function pointerMove(e){
+      const clientX = e.clientX ?? (e.touches && e.touches[0].clientX);
+      const clientY = e.clientY ?? (e.touches && e.touches[0].clientY);
+      if (clientX === undefined) return;
+      if (isDragging){
+        const dx = clientX - lastX, dy = clientY - lastY;
+        targetRotY = THREE.MathUtils.clamp(targetRotY + dx * 0.005, -MAX_ROT, MAX_ROT);
+        targetRotX = THREE.MathUtils.clamp(targetRotX - dy * 0.005, -MAX_ROT, MAX_ROT);
+        lastX = clientX; lastY = clientY;
+      } else {
+        onPointerMoveHover(clientX, clientY);
+      }
+    }
+    function pointerUp(){ isDragging = false; canvas.classList.remove('dragging'); hero.classList.remove('dragging'); }
+
+    canvas.addEventListener('pointerdown', pointerDown);
+    window.addEventListener('pointermove', pointerMove);
+    window.addEventListener('pointerup', pointerUp);
+    canvas.addEventListener('pointerleave', ()=>{ hovering=false; label.classList.remove('visible'); });
+
+    // ---- Scroll-driven dolly toward the screen ----
+    let scrollFrac = 0;
+    window.addEventListener('scroll', ()=>{
+      const h = hero.clientHeight;
+      scrollFrac = Math.min(Math.max(window.scrollY / h, 0), 1);
+    });
+
+    function resize(){
+      width = hero.clientWidth; height = hero.clientHeight;
+      const aspect = width/height;
+      camera.left = -frustum*aspect; camera.right = frustum*aspect;
+      camera.top = frustum; camera.bottom = -frustum;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height);
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    const lerpV = (a,b,t)=> a.clone().lerp(b,t);
+    let t = 0;
+    function animate(){
+      t += 0.01;
+
+      // smooth drag rotation
+      rig.rotation.y += (targetRotY - rig.rotation.y) * 0.08;
+      rig.rotation.x += (targetRotX - rig.rotation.x) * 0.08;
+
+      // scroll dolly (ease)
+      const ease = scrollFrac*scrollFrac*(3-2*scrollFrac);
+      const pos = lerpV(camDefaultPos, camClosePos, ease);
+      const tgt = lerpV(targetDefault, targetClose, ease);
+      camera.position.copy(pos);
+      camera.lookAt(tgt);
+
+      // hover pulse on monitor screen
+      const targetScale = hovering ? 1.05 : 1.0;
+      monitorScreen.scale.x += (targetScale - monitorScreen.scale.x) * 0.15;
+      monitorScreen.scale.y += (targetScale - monitorScreen.scale.y) * 0.15;
+      screenMat.opacity = hovering ? 1.0 : 0.85 + Math.sin(t*1.4)*0.05;
+      if (hovering) updateLabelPosition();
+
+      // holographic rings orbiting
+      rings.forEach(r=>{
+        if(r.userData.axis==='x') r.rotation.z += r.userData.speed*2;
+        if(r.userData.axis==='y') r.rotation.z += r.userData.speed*2;
+        if(r.userData.axis==='z') r.rotation.x += r.userData.speed*2;
+      });
+      orbitPivot.rotation.y += 0.003;
+      gridHelper.rotation.y += 0.004;
+
+      // gentle idle bob for whole desk
+      deskGroup.position.y = Math.sin(t*0.6)*0.04;
+
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
+    }
+    animate();
+    requestAnimationFrame(()=> canvas.classList.add('loaded'));
+  })();
+</script>
+</body>
+</html>
