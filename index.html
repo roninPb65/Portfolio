@@ -366,6 +366,35 @@
     text-transform:uppercase; color:var(--text-dim); margin-bottom:24px;
   }
 
+  /* ---------- POSITIONING STATEMENT ---------- */
+  .positioning-statement{
+    max-width:1180px;
+    margin-top:32px;
+    padding:28px 32px;
+    border-left:3px solid var(--frontend);
+    background:var(--bg-panel);
+  }
+  .positioning-statement p{
+    color:var(--text-muted);
+    font-size:0.98rem;
+    line-height:1.8;
+    max-width:820px;
+  }
+  .positioning-statement strong{ color:var(--text-primary); font-weight:500; }
+  .positioning-statement .pos-label{
+    display:block;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.7rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--frontend);
+    margin-bottom:12px;
+  }
+  @media(max-width:840px){
+    .positioning-statement{ padding:22px 22px; }
+    .positioning-statement p{ font-size:1rem; line-height:1.75; }
+  }
+
   /* ---------- WHY ME ---------- */
   .why-intro{ max-width:700px; margin-bottom:56px; }
   .why-intro p{ color:var(--text-muted); font-size:1.02rem; line-height:1.75; }
@@ -815,6 +844,10 @@
       <h3>I leave teams better than I found them.</h3>
       <p>I've trained and mentored three interns and a junior developer on coding standards and Git workflow — not because I was asked to have that title, but because a codebase only stays healthy if the people writing it are improving too.</p>
     </div>
+  </div>
+  <div class="positioning-statement reveal">
+    <span class="pos-label">Where I'm headed</span>
+    <p>To be direct about it: I'm not trying to become an AI Engineer or a dedicated Security Analyst — both are deep, specialized fields with their own hiring bars, and I respect that too much to claim I'm already there. What I am is <strong>a full-stack developer who understands both well enough that it changes how I build</strong> — the AI feature I ship is less likely to become a black box, and the system I hand off is less likely to need someone else to keep it safe. That combination, not a title change, is the actual pitch.</p>
   </div>
 </section>
 
