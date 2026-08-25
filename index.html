@@ -511,6 +511,55 @@
   .about-text p{ color:var(--text-muted); line-height:1.85; font-size:1.02rem; margin-bottom:20px; }
   .about-text strong{ color:var(--text-primary); font-weight:500; }
 
+  /* ---------- MOBILE READABILITY: collapsible content ---------- */
+  .read-more-btn{
+    display:none;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.82rem;
+    color:var(--frontend);
+    background:none; border:none; padding:6px 0 0;
+    cursor:pointer;
+  }
+  @media(max-width:840px){
+    .read-more-btn{ display:inline-flex; align-items:center; gap:6px; margin-top:6px; }
+    .collapsible{
+      max-height:1000px;
+      overflow:hidden;
+      position:relative;
+      transition:max-height 0.4s ease;
+    }
+    .collapsible.collapsed{ max-height:5.6em; }
+    .about-text .collapsible.collapsed{ max-height:6.6em; }
+    .collapsible.collapsed::after{
+      content:'';
+      position:absolute; bottom:0; left:0; right:0; height:44px;
+      background:linear-gradient(to bottom, transparent, var(--bg-void));
+    }
+    .log-entry .collapsible.collapsed::after{ background:linear-gradient(to bottom, transparent, var(--bg-void)); }
+  }
+
+  /* ---------- MOBILE READABILITY: bigger, roomier type ---------- */
+  @media(max-width:840px){
+    body{ font-size:16px; }
+    .hero-sub{ font-size:1.08rem; line-height:1.7; }
+    .about-text p{ font-size:1.04rem; line-height:1.8; }
+    .why-card p, .why-intro p{ font-size:1rem; line-height:1.75; }
+    .why-card h3{ font-size:1.28rem; }
+    .log-role{ font-size:1.24rem; }
+    .log-org{ font-size:0.96rem; }
+    .log-body li{ font-size:1rem; line-height:1.7; }
+    .project-card p{ font-size:1rem; line-height:1.75; }
+    .project-card h3{ font-size:1.28rem; }
+    .capstone-main p{ font-size:1.02rem; line-height:1.8; }
+    .capstone-main h3{ font-size:1.4rem; }
+    .capstone-highlights li{ font-size:0.97rem; line-height:1.7; }
+    .console-intro p{ font-size:1rem; line-height:1.75; }
+    section .eyebrow{ margin-bottom:16px; }
+    .section-head{ margin-bottom:44px; }
+    .why-card, .project-card{ padding:32px 26px; }
+    .log-entry{ padding:30px 0; }
+  }
+
   .about-facts{ display:flex; flex-direction:column; gap:0; border-top:1px solid var(--line-soft); }
   .fact{
     display:flex; justify-content:space-between; align-items:baseline;
@@ -718,9 +767,12 @@
   </div>
   <div class="about-grid">
     <div class="about-text reveal">
-      <p>I'm a full-stack developer with hands-on experience across the entire <strong>Software Development Life Cycle</strong> — system analysis and design, program design, coding, testing, documentation, implementation, configuration, and ongoing production support.</p>
-      <p>Most recently I worked inside a live Electronic Medical Record platform, tracking production performance and correcting operational problems as they surfaced — not just shipping features, but owning what happens after. Before that, I supported a logistics operations platform used daily by brokers, managers, and finance teams, correcting issues in real time and liaising directly with the people who depended on the system.</p>
-      <p>I hold a postgraduate diploma in <strong>Artificial Intelligence</strong> from SAIT and a diploma in <strong>Cyber Security</strong> from Saskatchewan Polytechnic, and I've trained and mentored junior developers and interns on coding standards and Git workflows.</p>
+      <div class="collapsible collapsed" id="aboutCollapse">
+        <p>I'm a full-stack developer with hands-on experience across the entire <strong>Software Development Life Cycle</strong> — system analysis and design, program design, coding, testing, documentation, implementation, configuration, and ongoing production support.</p>
+        <p>Most recently I worked inside a live Electronic Medical Record platform, tracking production performance and correcting operational problems as they surfaced — not just shipping features, but owning what happens after. Before that, I supported a logistics operations platform used daily by brokers, managers, and finance teams, correcting issues in real time and liaising directly with the people who depended on the system.</p>
+        <p>I hold a postgraduate diploma in <strong>Artificial Intelligence</strong> from SAIT and a diploma in <strong>Cyber Security</strong> from Saskatchewan Polytechnic, and I've trained and mentored junior developers and interns on coding standards and Git workflows.</p>
+      </div>
+      <button class="read-more-btn" data-target="aboutCollapse" data-show="Read more" data-hide="Show less">Read more ↓</button>
     </div>
     <div class="about-facts reveal">
       <div class="fact"><span>Based in</span><span>Calgary, AB</span></div>
@@ -845,11 +897,12 @@
       <div>
         <div class="log-role">Back End Developer — Guardian EMR</div>
         <div class="log-org">Weyburn, Saskatchewan <span>· Electronic Medical Record platform</span></div>
-        <ul class="log-body">
+        <ul class="log-body collapsible" id="logCollapse1">
           <li>Analyzed and designed EMR system components, translating clinical workflow requirements into specs, then carried them through coding, testing, and implementation across Angular front end and Laravel back end, hosted on DigitalOcean.</li>
           <li>Tracked and monitored production performance, diagnosing and correcting operational problems alongside front-end and QA teams to minimize disruption to daily clinical operations.</li>
           <li>Monitored network traffic through Cloudflare and maintained backup and recovery procedures protecting a system handling sensitive patient data.</li>
         </ul>
+        <button class="read-more-btn log-toggle" data-target="logCollapse1" data-show="Show details" data-hide="Hide details">Hide details ↑</button>
       </div>
     </div>
 
@@ -861,12 +914,13 @@
       <div>
         <div class="log-role">PHP Developer — Live Development Support</div>
         <div class="log-org">Creed InfoTech, Punjab, India <span>· valueloads.com logistics platform</span></div>
-        <ul class="log-body">
+        <ul class="log-body collapsible collapsed" id="logCollapse2">
           <li>Provided live coding, configuration, and production support for a logistics operations platform used by brokers, managers, team leads, and Accounts Payable/Receivable staff, plus an executive dashboard.</li>
           <li>Diagnosed and corrected production issues in real time, maintaining close liaison with client departments to keep pace with a changing business environment.</li>
           <li>Prepared development plans and implemented ongoing enhancements, including backend configuration, deployments, and AWS S3 storage management.</li>
           <li>Helped client departments pull information from corporate databases for day-to-day reporting.</li>
         </ul>
+        <button class="read-more-btn log-toggle" data-target="logCollapse2" data-show="Show details" data-hide="Hide details">Show details ↓</button>
       </div>
     </div>
 
@@ -878,11 +932,12 @@
       <div>
         <div class="log-role">Web Developer — NexEver Pvt Ltd</div>
         <div class="log-org">Sahibzada Ajit Singh Nagar, Punjab, India <span>· Software solutions agency</span></div>
-        <ul class="log-body">
+        <ul class="log-body collapsible collapsed" id="logCollapse3">
           <li>Handled program design, coding, and testing for client web applications using HTML, CSS, PHP, SQL, Laravel, Node.js, and Angular across multiple concurrent projects.</li>
           <li>Set up Git version control and GitHub-based CI/CD pipelines to automate testing and deployment.</li>
           <li>Trained and mentored 3 interns and 1 junior developer on coding standards, Git workflows, and development practices.</li>
         </ul>
+        <button class="read-more-btn log-toggle" data-target="logCollapse3" data-show="Show details" data-hide="Hide details">Show details ↓</button>
       </div>
     </div>
 
@@ -1051,6 +1106,18 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
+  // ---------- Collapsible sections (About, Experience) — mobile readability ----------
+  (function(){
+    document.querySelectorAll('.read-more-btn').forEach(btn=>{
+      const target = document.getElementById(btn.dataset.target);
+      if (!target) return;
+      btn.addEventListener('click', ()=>{
+        const nowCollapsed = target.classList.toggle('collapsed');
+        btn.textContent = nowCollapsed ? (btn.dataset.show + ' ↓') : (btn.dataset.hide + ' ↑');
+      });
+    });
+  })();
+
   // ---------- Mobile menu ----------
   (function(){
     const burger = document.getElementById('navBurger');
